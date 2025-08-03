@@ -28,7 +28,7 @@ Este es un mini proyecto de conversión de monedas que utiliza la ExchangeRate A
 
 ## Captura de pantalla
 
-![Captura del Conversor](img/conversor.png)
+![Captura del Conversor](conversor.png)
 
 ---
 
