@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conversor de Divisas</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>💱 Conversor de Divisas</h1>
+    <form id="formulario">
+      <input type="number" id="monto" placeholder="Monto en USD" min="0" required />
+      <select id="monedaDestino">
+        <option value="PEN">PEN (Soles)</option>
+        <option value="EUR">EUR (Euros)</option>
+        <option value="JPY">JPY (Yenes)</option>
+        <option value="ARS">ARS (Pesos Argentinos)</option>
+        <option value="MXN">MXN (Pesos Mexicanos)</option>
+      </select>
+      <button type="submit">Convertir</button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
