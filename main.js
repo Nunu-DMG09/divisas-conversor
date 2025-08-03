@@ -10,11 +10,12 @@ const monedas = [
 const selectDe = document.getElementById("de");
 const selectA = document.getElementById("a");
 const btnConvertir = document.getElementById("convertir");
+const btnExportar = document.getElementById("exportar");
 const resultado = document.getElementById("resultado");
 const historial = document.getElementById("historial");
 const inputMonto = document.getElementById("monto");
 
-// Cargar opciones de monedas
+// cargar las opciones de monedas
 monedas.forEach((moneda) => {
   const option1 = document.createElement("option");
   const option2 = document.createElement("option");
@@ -28,14 +29,14 @@ monedas.forEach((moneda) => {
 selectDe.value = "USD";
 selectA.value = "PEN";
 
-// Convertir divisas usando FawazAhmed (vía exchangerate-api.com mirror)
+// funcion para la api
 const convertirDivisa = async () => {
   const monto = parseFloat(inputMonto.value);
   const de = selectDe.value;
   const a = selectA.value;
 
   if (isNaN(monto) || monto <= 0) {
-    resultado.textContent = "⚠️ Ingresa un monto válido.";
+    resultado.textContent = "Ingresa un monto válido.";
     return;
   }
 
@@ -66,8 +67,34 @@ const convertirDivisa = async () => {
     historial.prepend(entradaHistorial);
   } catch (error) {
     console.error("Error en conversión:", error.message);
-    resultado.textContent = "❌ Error al convertir. Intenta nuevamente.";
+    resultado.textContent = "Error al convertir. Intenta nuevamente.";
   }
 };
 
 btnConvertir.addEventListener("click", convertirDivisa);
+
+
+// exportar el historial 
+btnExportar.addEventListener("click", () => {
+  const historialItems = historial.querySelectorAll("div");
+  if (historialItems.length === 0) {
+    alert("No hay historial para exportar.");
+    return;
+  }
+
+  let contenido = "Historial de conversiones:\n\n";
+  historialItems.forEach((item, index) => {
+    contenido += `${index + 1}. ${item.textContent}\n`;
+  });
+
+  const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "historial_conversiones.txt";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+});
