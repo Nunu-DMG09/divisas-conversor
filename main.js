@@ -12,8 +12,9 @@ const selectA = document.getElementById("a");
 const btnConvertir = document.getElementById("convertir");
 const resultado = document.getElementById("resultado");
 const historial = document.getElementById("historial");
+const inputMonto = document.getElementById("monto");
 
-
+// Cargar opciones de monedas
 monedas.forEach((moneda) => {
   const option1 = document.createElement("option");
   const option2 = document.createElement("option");
@@ -27,46 +28,45 @@ monedas.forEach((moneda) => {
 selectDe.value = "USD";
 selectA.value = "PEN";
 
-// funcion para convertir usando fetch async y await
+// Convertir divisas usando FawazAhmed (vía exchangerate-api.com mirror)
 const convertirDivisa = async () => {
-  const monto = parseFloat(document.getElementById("monto").value);
+  const monto = parseFloat(inputMonto.value);
   const de = selectDe.value;
   const a = selectA.value;
 
   if (isNaN(monto) || monto <= 0) {
-    resultado.textContent = "Ingresa un monto válido.";
+    resultado.textContent = "⚠️ Ingresa un monto válido.";
     return;
   }
 
-  try {
-    const url = `https://api.exchangerate.host/convert?from=${de}&to=${a}&amount=${monto}`;
-    const res = await fetch(url);
-    if (!res.ok) {
-    throw new Error(`HTTP error: ${res.status}`);
-    }
+  resultado.innerHTML = "⌛ Calculando...";
 
+  try {
+    const url = `https://api.exchangerate-api.com/v4/latest/${de}`;
+    const res = await fetch(url);
+
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
     const data = await res.json();
 
-    console.log(data); // Esto para ver la respuesta de la api
+    const tasa = data.rates[a];
+    if (!tasa) throw new Error("Moneda destino no soportada");
 
-    if (!data.result) throw new Error("Resultado inválido");
-
-    const banderaDe = monedas.find((m) => m.code === de).flag;
-    const banderaA = monedas.find((m) => m.code === a).flag;
+    const total = (monto * tasa).toFixed(2);
+    const banderaDe = monedas.find((m) => m.code === de)?.flag || "";
+    const banderaA = monedas.find((m) => m.code === a)?.flag || "";
 
     resultado.innerHTML = `
       ${banderaDe} ${monto} ${de} = 
-      <strong>${banderaA} ${data.result.toFixed(2)} ${a}</strong>
+      <strong>${banderaA} ${total} ${a}</strong>
     `;
 
-    //agregar al historial
     const entradaHistorial = document.createElement("div");
-    entradaHistorial.textContent = `${new Date().toLocaleTimeString()} - ${banderaDe} ${monto} ${de} ➡️ ${banderaA} ${data.result.toFixed(2)} ${a}`;
+    entradaHistorial.textContent = `${new Date().toLocaleTimeString()} - ${banderaDe} ${monto} ${de} ➡️ ${banderaA} ${total} ${a}`;
     historial.prepend(entradaHistorial);
   } catch (error) {
-    console.error("Error en conversión:", error);
-    resultado.textContent = "Error al convertir. Intenta nuevamente.";
+    console.error("Error en conversión:", error.message);
+    resultado.textContent = "❌ Error al convertir. Intenta nuevamente.";
   }
 };
 
