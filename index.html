@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -24,4 +24,38 @@
   </div>
   <script src="app.js"></script>
 </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🧮 Conversor de Divisas</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <div class="app">
+    <h1>🧮 Conversor de Divisas</h1>
+
+    <div class="formulario">
+      <input type="number" id="monto" placeholder="Monto" />
+      
+      <select id="de"></select>
+      <span>➡️</span>
+      <select id="a"></select>
+      
+      <button id="convertir">Convertir</button>
+    </div>
+
+    <div id="resultado" class="resultado"></div>
+    <div id="historial" class="historial"></div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
 </html>
+
+
+
